@@ -20,7 +20,7 @@ function login() {
   fetch("http://localhost:3000/login", {
     method : "POST",
     body : JSON.stringify({username : username, password : password}),
-    headers : {"Content-Type" : "application/json; chartset=UTF-8"}
+    headers : {"Content-Type" : "application/json; charset=UTF-8"}
   })
       .then((response) => response.json())
       .then((json) => {
@@ -28,8 +28,9 @@ function login() {
 
         socket = new WebSocket("ws://localhost:3000/ws?token=" + json.token);
         socket.onmessage = (event) => {
-          const message = event.data;
-          document.getElementById("output").innerText = message;
+          const data = JSON.parse(event.data);
+          document.getElementById("output").innerText +=
+              data.username + ": " + data.message + "\n";
         };
       });
 }
