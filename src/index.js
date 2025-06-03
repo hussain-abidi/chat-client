@@ -30,7 +30,7 @@ function login() {
         socket.onmessage = (event) => {
           const data = JSON.parse(event.data);
           document.getElementById("output").innerText +=
-              data.username + ": " + data.message + "\n";
+              data.from + ": " + data.message + "\n";
         };
       });
 }
@@ -42,7 +42,8 @@ function send() {
   if (!socket)
     return;
   const message = document.getElementById("message").value;
-  socket.send(message);
+  const to = document.getElementById("to").value;
+  socket.send(JSON.stringify({message : message, to : to}));
 }
 
 document.getElementById("send").addEventListener("click", send);
